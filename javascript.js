@@ -54,6 +54,7 @@ function playRound(playerOption) {
     }
 
     updateUiScore(); // Refleja los cambios en la UI
+    updateWinner();
 }
 
 /**
@@ -64,6 +65,15 @@ function updateUiScore() {
     const cpuScoreUi = document.querySelector(".cpuScore p");
     playerScoreUi.textContent = playerScore;
     cpuScoreUi.textContent = cpuScore;
+}
+
+function updateWinner()
+{
+    if(playerScore == 5){
+        console.log("Player WINS!")
+        }else if(cpuScore == 5){
+            console.log("CPU WINS!")
+        }
 }
 
 /**
