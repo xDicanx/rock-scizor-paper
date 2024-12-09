@@ -1,29 +1,27 @@
+// Variables globales para las puntuaciones
 let playerScore = 0;
 let cpuScore = 0;
 
-for (let i = 0; i < 5; i++) {
-    if (playerScore == 3 || cpuScore == 3) {
-        if (playerScore > cpuScore) {
-            console.log("Player won the game!");
-            break;
-        } else {
-            console.log("CPU won the game!");
-            break;
-        }
-    } else {
-        playRound();
-    }
-}
+// Selecciona los botones de las opciones del jugador y asigna eventos
+const playerOptionsAll = document.querySelectorAll(".playerOptions button");
 
+playerOptionsAll.forEach((button) => {
+    // Cada botón inicia una ronda con la opción seleccionada
+    button.addEventListener("click", () => playRound(button.textContent.toLocaleLowerCase()));
+});
 
-function playRound() {
-    let cpuChoice = getComputerChoice();
+/**
+ * Juega una ronda del juego.
+ * @param {string} playerOption - Elección del jugador ('rock', 'scizors', 'paper').
+ */
+function playRound(playerOption) {
+    const cpuChoice = getComputerChoice();
     console.log("CPU CHOOSE: " + cpuChoice);
-    switch (getHumanChoise()) {
+    switch (playerOption) {
         case "rock":
             if (cpuChoice == "rock") {
                 console.log("Draw");
-            } else if (cpuChoice == "scizor") {
+            } else if (cpuChoice == "scizors") {
                 console.log("Player Wins");
                 playerScore++;
             } else {
@@ -35,7 +33,7 @@ function playRound() {
             if (cpuChoice == "rock") {
                 console.log("Player lose");
                 cpuScore++;
-            } else if (cpuChoice == "scizor") {
+            } else if (cpuChoice == "scizors") {
                 console.log("Draw");
             } else {
                 console.log("Player Wins");
@@ -46,7 +44,7 @@ function playRound() {
             if (cpuChoice == "rock") {
                 console.log("Player Wins");
                 playerScore++;
-            } else if (cpuChoice == "scizor") {
+            } else if (cpuChoice == "scizors") {
                 console.log("Player Lose");
                 cpuScore++;
             } else {
@@ -54,31 +52,52 @@ function playRound() {
             }
             break;
     }
+
+    updateUiScore(); // Refleja los cambios en la UI
 }
 
+/**
+ * Actualiza la interfaz con los puntajes actuales.
+ */
+function updateUiScore() {
+    const playerScoreUi = document.querySelector(".playerScore p");
+    const cpuScoreUi = document.querySelector(".cpuScore p");
+    playerScoreUi.textContent = playerScore;
+    cpuScoreUi.textContent = cpuScore;
+}
 
+/**
+ * Genera una elección aleatoria para la CPU.
+ * @returns {string} 'rock', 'scizors', o 'paper'.
+ */
 function getComputerChoice() {
+    const cpuOptionsAll = document.querySelectorAll(".cpuSelection button");
     const cpuChoice = Math.floor(Math.random() * 3) + 1;
     switch (cpuChoice) {
         case 1:
-            return "rock";
-
-        case 2:
-            return "scizor";
-
-        case 3:
+            changeColorOfCpuSelectionButton(cpuOptionsAll, "rock");
+             return "rock";
+        case 2: 
+            changeColorOfCpuSelectionButton(cpuOptionsAll, "scizors");
+            return "scizors";
+        case 3: 
+            changeColorOfCpuSelectionButton(cpuOptionsAll, "paper");
             return "paper";
     }
 }
 
-function getHumanChoise() {
-    let userInput;
-    const validOptions = ["rock", "scizor", "paper"];
-    do {
-        userInput = prompt("Please select an option (rock, scizor, paper): ").toLowerCase();
-        if (!validOptions.includes(userInput)) {
-            alert("Entrada invalida");
-        }
-    } while (!validOptions.includes(userInput));
-    return userInput;
+function changeColorOfCpuSelectionButton(cpuOptionsAll, selection)
+{
+    //resetting color selections
+    cpuOptionsAll.forEach((button)=>{
+        button.style.background = "";
+    });
+
+    //adding color to the selection
+    cpuOptionsAll.forEach((button) =>{
+        if(button.textContent.trim().toLowerCase() === selection)
+            {
+                button.style.background = "red";
+            }
+    });
 }
